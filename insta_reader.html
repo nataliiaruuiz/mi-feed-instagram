@@ -17,187 +17,152 @@
     header {
       padding: 20px 16px 12px;
       border-bottom: 1px solid #222;
-      position: sticky;
-      top: 0;
+      position: sticky; top: 0;
       background: #0f0f0f;
       z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
     }
-
-    header h1 {
-      font-size: 18px;
-      font-weight: 600;
-      letter-spacing: -0.3px;
-    }
+    header h1 { font-size: 18px; font-weight: 600; }
 
     #refresh-btn {
-      background: #222;
-      border: none;
-      color: #f0f0f0;
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 13px;
-      cursor: pointer;
-      transition: background 0.2s;
+      background: #222; border: none; color: #f0f0f0;
+      padding: 8px 14px; border-radius: 20px; font-size: 13px; cursor: pointer;
     }
     #refresh-btn:active { background: #333; }
 
-    #status {
-      text-align: center;
-      padding: 40px 16px;
-      color: #666;
-      font-size: 14px;
-    }
+    #status { text-align: center; padding: 40px 16px; color: #666; font-size: 14px; }
 
     #error-msg {
-      display: none;
-      margin: 16px;
-      padding: 14px 16px;
-      background: #1a0a0a;
-      border: 1px solid #5c1a1a;
-      border-radius: 10px;
-      color: #ff6b6b;
-      font-size: 13px;
-      line-height: 1.5;
+      display: none; margin: 16px; padding: 14px 16px;
+      background: #1a0a0a; border: 1px solid #5c1a1a;
+      border-radius: 10px; color: #ff6b6b; font-size: 13px; line-height: 1.5;
     }
 
-    /* Sección por cuenta */
-    .account-section {
-      margin-bottom: 8px;
-    }
+    .account-section { margin-bottom: 8px; }
 
     .account-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: flex; align-items: center; gap: 10px;
       padding: 14px 16px 10px;
     }
-
     .account-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: #333;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      font-weight: 700;
-      color: #aaa;
-      flex-shrink: 0;
-      text-transform: uppercase;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #333; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: #aaa;
+      flex-shrink: 0; text-transform: uppercase;
     }
+    .account-name { font-size: 14px; font-weight: 600; color: #ccc; }
+    .account-count { font-size: 12px; color: #555; margin-left: auto; }
 
-    .account-name {
-      font-size: 14px;
-      font-weight: 600;
-      color: #ccc;
-    }
-
-    .account-count {
-      font-size: 12px;
-      color: #555;
-      margin-left: auto;
-    }
-
-    /* Grid de posts */
     .posts-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2px;
-      padding: 0 2px;
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 2px; padding: 0 2px;
     }
 
     .post-card {
-      position: relative;
-      background: #1a1a1a;
-      overflow: hidden;
-      cursor: default;
+      background: #1a1a1a; overflow: hidden;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
     }
-
-    .post-card:active .post-overlay { opacity: 1; }
+    .post-card:active { opacity: 0.75; }
 
     .post-img-wrap {
-      position: relative;
-      padding-top: 100%; /* cuadrado */
-      background: #1a1a1a;
+      position: relative; padding-top: 100%; background: #1a1a1a;
     }
-
     .post-img-wrap img {
-      position: absolute;
-      top: 0; left: 0;
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    /* Placeholder para vídeos y carruseles */
+    .post-placeholder {
+      position: absolute; top: 0; left: 0;
       width: 100%; height: 100%;
-      object-fit: cover;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 8px; color: #555;
+    }
+    .post-placeholder .placeholder-icon { font-size: 28px; }
+    .post-placeholder .placeholder-label { font-size: 11px; color: #444; }
+
+    /* Badge de tipo en esquina */
+    .post-badge {
+      position: absolute; top: 6px; right: 6px;
+      background: rgba(0,0,0,0.7);
+      border-radius: 4px; padding: 2px 5px;
+      font-size: 11px; color: #ccc;
     }
 
-    .post-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      opacity: 0;
-      transition: opacity 0.2s;
-      display: flex;
-      align-items: flex-end;
-      padding: 10px;
-    }
-
-    .post-caption-overlay {
-      font-size: 11px;
-      color: #fff;
-      line-height: 1.4;
-      display: -webkit-box;
-      -webkit-line-clamp: 4;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .post-info {
-      padding: 8px 10px 10px;
-    }
-
+    .post-info { padding: 8px 10px 10px; }
     .post-caption {
-      font-size: 12px;
-      color: #bbb;
-      line-height: 1.45;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      margin-bottom: 4px;
+      font-size: 12px; color: #bbb; line-height: 1.45;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px;
+    }
+    .post-date { font-size: 11px; color: #555; }
+
+    .divider { height: 1px; background: #1e1e1e; margin: 8px 0; }
+    .empty-account { padding: 12px 16px; color: #555; font-size: 13px; }
+    .account-loading { padding: 12px 16px; color: #555; font-size: 13px; }
+
+    #last-update { text-align: center; padding: 20px 16px; color: #444; font-size: 12px; }
+
+    /* ── MODAL ── */
+    #modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.95);
+      z-index: 100; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    }
+    #modal-overlay.open { display: block; }
+
+    #modal-box {
+      margin: 0 auto; max-width: 500px;
+      min-height: 100vh; display: flex; flex-direction: column;
     }
 
-    .post-date {
-      font-size: 11px;
-      color: #555;
+    #modal-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px 10px;
+      position: sticky; top: 0;
+      background: rgba(0,0,0,0.97); z-index: 101;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    #modal-account { display: flex; align-items: center; gap: 10px; }
+    #modal-avatar {
+      width: 30px; height: 30px; border-radius: 50%; background: #333;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: #aaa; text-transform: uppercase; flex-shrink: 0;
+    }
+    #modal-username { font-size: 13px; font-weight: 600; color: #ddd; }
+    #modal-date { font-size: 11px; color: #555; margin-top: 1px; }
+
+    #modal-close {
+      background: #222; border: none; color: #aaa;
+      width: 32px; height: 32px; border-radius: 50%;
+      font-size: 20px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
 
-    .divider {
-      height: 1px;
-      background: #1e1e1e;
-      margin: 8px 0;
+    #modal-tipo {
+      padding: 8px 16px 0;
+      font-size: 12px; color: #555;
     }
 
-    .empty-account {
-      padding: 12px 16px;
-      color: #555;
-      font-size: 13px;
-    }
+    #modal-img-wrap { width: 100%; background: #111; }
+    #modal-img-wrap img { width: 100%; display: block; object-fit: contain; }
 
-    /* Estado de carga por cuenta */
-    .account-loading {
-      padding: 12px 16px;
-      color: #555;
-      font-size: 13px;
+    /* Placeholder del modal para vídeo/carrusel */
+    #modal-placeholder {
+      display: none;
+      width: 100%; padding: 48px 16px;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 12px; background: #111;
     }
+    #modal-placeholder .ph-icon { font-size: 48px; }
+    #modal-placeholder .ph-text { font-size: 14px; color: #555; text-align: center; line-height: 1.5; }
 
-    /* Última actualización */
-    #last-update {
-      text-align: center;
-      padding: 20px 16px;
-      color: #444;
-      font-size: 12px;
+    #modal-caption {
+      padding: 16px; font-size: 14px; color: #ccc;
+      line-height: 1.7; white-space: pre-wrap; word-break: break-word;
+      flex: 1; padding-bottom: 48px;
     }
   </style>
 </head>
@@ -213,17 +178,41 @@
 <div id="feed"></div>
 <div id="last-update"></div>
 
+<!-- MODAL -->
+<div id="modal-overlay" onclick="cerrarModal(event)">
+  <div id="modal-box">
+    <div id="modal-topbar">
+      <div id="modal-account">
+        <div id="modal-avatar"></div>
+        <div>
+          <div id="modal-username"></div>
+          <div id="modal-date"></div>
+        </div>
+      </div>
+      <button id="modal-close" onclick="cerrarModalDirecto()">×</button>
+    </div>
+    <div id="modal-tipo"></div>
+    <div id="modal-img-wrap">
+      <img id="modal-img" src="" alt="" onerror="mostrarPlaceholderModal()">
+    </div>
+    <div id="modal-placeholder">
+      <div class="ph-icon" id="modal-ph-icon"></div>
+      <div class="ph-text" id="modal-ph-text"></div>
+    </div>
+    <div id="modal-caption"></div>
+  </div>
+</div>
+
 <script>
 // ================================================================
-// CONFIGURACIÓN: pon aquí tus cuentas reales
-// La URL base es la de tu propio bridge en Render.
+// CONFIGURACIÓN
 // ================================================================
 const BRIDGE_BASE = "https://my-rss-bridge.onrender.com";
 
 const CUENTAS = [
   "nasa",
-  // "otra_cuenta_universidad",
-  // "otra_cuenta_universidad_2",
+  // "cuenta_universidad_1",
+  // "cuenta_universidad_2",
 ];
 // ================================================================
 
@@ -232,23 +221,40 @@ function urlFeed(username) {
   return `https://corsproxy.io/?url=${encodeURIComponent(feedUrl)}`;
 }
 
-function extraerImagen(item) {
-  // Primero intentamos attachments (más fiable)
-  if (item.attachments && item.attachments.length > 0) {
-    return item.attachments[0].url;
-  }
-  // Si no, extraemos la img del content_html
-  const match = item.content_html && item.content_html.match(/src="([^"]+)"/);
-  return match ? match[1].replace(/\\/g, '') : null;
+function tipoPost(item) {
+  const html = item.content_html || '';
+  if (html.includes('<video') || html.includes('video')) return 'video';
+  const imgs = html.match(/<img/g);
+  if (imgs && imgs.length > 1) return 'carrusel';
+  if (item.attachments && item.attachments.length > 1) return 'carrusel';
+  return 'foto';
 }
 
-function extraerCaption(item) {
-  // El title suele ser los primeros caracteres del caption
-  return item.title || "";
+function extraerImagen(item) {
+  if (item.attachments && item.attachments.length > 0) {
+    return item.attachments[0].url.replace(/\\/g, '');
+  }
+  const html = item.content_html || '';
+  const m = html.match(/src=\\"([^\\"]+)\\"/);
+  if (m) return m[1].replace(/\\/g, '');
+  const m2 = html.match(/src="([^"]+\/media[^"]+)"/);
+  if (m2) return m2[1];
+  const m3 = html.match(/src="([^"]+)"/);
+  if (m3) return m3[1];
+  return null;
+}
+
+function extraerCaptionLimpio(item) {
+  if (!item.content_html) return item.title || '';
+  const tmp = document.createElement('div');
+  tmp.innerHTML = item.content_html;
+  const primerA = tmp.querySelector('a');
+  if (primerA && primerA.querySelector('img')) primerA.remove();
+  return tmp.innerText.trim();
 }
 
 function formatearFecha(iso) {
-  if (!iso) return "";
+  if (!iso) return '';
   const d = new Date(iso);
   const ahora = new Date();
   const diff = ahora - d;
@@ -261,43 +267,119 @@ function formatearFecha(iso) {
   return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
 }
 
+function mostrarPlaceholderModal() {
+  document.getElementById('modal-img-wrap').style.display = 'none';
+  document.getElementById('modal-placeholder').style.display = 'flex';
+}
+
+const datosCache = {};
+
+function abrirModal(username, idx) {
+  const item = datosCache[username]?.[idx];
+  if (!item) return;
+
+  const img = extraerImagen(item);
+  const caption = extraerCaptionLimpio(item);
+  const fecha = formatearFecha(item.date_modified);
+  const tipo = tipoPost(item);
+
+  document.getElementById('modal-avatar').textContent = username[0] || '?';
+  document.getElementById('modal-username').textContent = `@${username}`;
+  document.getElementById('modal-date').textContent = fecha;
+  document.getElementById('modal-caption').textContent = caption;
+
+  // Badge de tipo
+  const tipoEl = document.getElementById('modal-tipo');
+  if (tipo === 'video') tipoEl.textContent = '🎥 Vídeo';
+  else if (tipo === 'carrusel') tipoEl.textContent = '🖼️ Carrusel · solo se muestra la primera imagen';
+  else tipoEl.textContent = '';
+
+  const imgWrap = document.getElementById('modal-img-wrap');
+  const placeholder = document.getElementById('modal-placeholder');
+  const modalImg = document.getElementById('modal-img');
+
+  // Reset estado anterior
+  imgWrap.style.display = 'block';
+  placeholder.style.display = 'none';
+
+  if (tipo === 'video') {
+    imgWrap.style.display = 'none';
+    placeholder.style.display = 'flex';
+    document.getElementById('modal-ph-icon').textContent = '🎥';
+    document.getElementById('modal-ph-text').textContent = 'Este post es un vídeo.\nAbre Instagram para verlo.';
+  } else if (img) {
+    modalImg.src = img;
+  } else {
+    mostrarPlaceholderModal();
+    document.getElementById('modal-ph-icon').textContent = '🖼️';
+    document.getElementById('modal-ph-text').textContent = 'Imagen no disponible';
+  }
+
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function cerrarModalDirecto() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function cerrarModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) cerrarModalDirecto();
+}
+
+window.addEventListener('popstate', cerrarModalDirecto);
+
 function renderPosts(username, items) {
   if (!items || items.length === 0) {
     return `<div class="empty-account">Sin posts recientes</div>`;
   }
 
-  const cards = items.map(item => {
+  return `<div class="posts-grid">${items.map((item, idx) => {
     const img = extraerImagen(item);
-    const caption = extraerCaption(item);
+    const tipo = tipoPost(item);
+    const caption = item.title || '';
     const fecha = formatearFecha(item.date_modified);
 
-    const imgHtml = img
-      ? `<img src="${img.replace(/\\/g, '')}" alt="" loading="lazy" onerror="this.parentElement.style.background='#222'">`
-      : '';
+    let contenidoImagen;
+    if (tipo === 'video') {
+      contenidoImagen = `
+        <div class="post-placeholder">
+          <div class="placeholder-icon">🎥</div>
+          <div class="placeholder-label">Vídeo</div>
+        </div>`;
+    } else if (img) {
+      contenidoImagen = `<img src="${img}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="post-placeholder" style="display:none">
+          <div class="placeholder-icon">${tipo === 'carrusel' ? '🖼️' : '📷'}</div>
+          <div class="placeholder-label">${tipo === 'carrusel' ? 'Carrusel' : ''}</div>
+        </div>`;
+    } else {
+      contenidoImagen = `
+        <div class="post-placeholder">
+          <div class="placeholder-icon">📷</div>
+        </div>`;
+    }
+
+    const badge = tipo !== 'foto' ? `<div class="post-badge">${tipo === 'video' ? '▶' : '⊞'}</div>` : '';
 
     return `
-      <div class="post-card">
+      <div class="post-card" onclick="abrirModal('${username}', ${idx})">
         <div class="post-img-wrap">
-          ${imgHtml}
-          <div class="post-overlay">
-            <div class="post-caption-overlay">${caption}</div>
-          </div>
+          ${contenidoImagen}
+          ${badge}
         </div>
         <div class="post-info">
           <div class="post-caption">${caption}</div>
           <div class="post-date">${fecha}</div>
         </div>
-      </div>
-    `;
-  }).join('');
-
-  return `<div class="posts-grid">${cards}</div>`;
+      </div>`;
+  }).join('')}</div>`;
 }
 
 async function fetchCuenta(username) {
-  const url = urlFeed(username);
-  const resp = await fetch(url);
-  if (!resp.ok) throw new Error(`HTTP ${resp.status} para @${username}`);
+  const resp = await fetch(urlFeed(username));
+  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
   const data = await resp.json();
   return data.items || [];
 }
@@ -317,8 +399,6 @@ async function cargarTodo() {
 
   for (let i = 0; i < CUENTAS.length; i++) {
     const username = CUENTAS[i];
-
-    // Mostramos el bloque de la cuenta enseguida, con indicador de carga
     const section = document.createElement('div');
     section.className = 'account-section';
     section.innerHTML = `
@@ -326,7 +406,7 @@ async function cargarTodo() {
         <div class="account-avatar">${username[0]}</div>
         <div class="account-name">@${username}</div>
       </div>
-      <div class="account-loading" id="loading-${username}">Cargando posts...</div>
+      <div class="account-loading" id="loading-${username}">Cargando...</div>
       ${i < CUENTAS.length - 1 ? '<div class="divider"></div>' : ''}
     `;
     feed.appendChild(section);
@@ -334,10 +414,9 @@ async function cargarTodo() {
 
     try {
       const items = await fetchCuenta(username);
-      const loadingEl = document.getElementById(`loading-${username}`);
-      if (loadingEl) loadingEl.outerHTML = renderPosts(username, items);
-
-      // Actualizar contador
+      datosCache[username] = items;
+      const el = document.getElementById(`loading-${username}`);
+      if (el) el.outerHTML = renderPosts(username, items);
       const header = section.querySelector('.account-header');
       if (header && items.length > 0) {
         const count = document.createElement('span');
@@ -346,15 +425,11 @@ async function cargarTodo() {
         header.appendChild(count);
       }
     } catch (e) {
-      const loadingEl = document.getElementById(`loading-${username}`);
-      if (loadingEl) {
-        loadingEl.textContent = `No se pudo cargar @${username}`;
-        loadingEl.style.color = '#ff6b6b';
-      }
+      const el = document.getElementById(`loading-${username}`);
+      if (el) { el.textContent = `No se pudo cargar @${username}`; el.style.color = '#ff6b6b'; }
       errores.push(`@${username}: ${e.message}`);
     }
 
-    // Pequeña pausa entre cuentas para no saturar el bridge
     if (i < CUENTAS.length - 1) await new Promise(r => setTimeout(r, 1500));
   }
 
@@ -362,11 +437,9 @@ async function cargarTodo() {
     errorMsg.style.display = 'block';
     errorMsg.innerHTML = `⚠️ Algunos feeds fallaron:<br>${errores.join('<br>')}`;
   }
-
-  lastUpdate.textContent = `Última actualización: ${new Date().toLocaleTimeString('es-ES')}`;
+  lastUpdate.textContent = `Actualizado: ${new Date().toLocaleTimeString('es-ES')}`;
 }
 
-// Arrancamos al cargar la página
 cargarTodo();
 </script>
 </body>

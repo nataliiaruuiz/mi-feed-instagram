@@ -6,91 +6,64 @@
   <title>Mi Feed</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
-      background: #0f0f0f;
-      color: #f0f0f0;
+      background: #0f0f0f; color: #f0f0f0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       min-height: 100vh;
     }
-
     header {
-      padding: 20px 16px 12px;
-      border-bottom: 1px solid #222;
-      position: sticky; top: 0;
-      background: #0f0f0f;
-      z-index: 10;
+      padding: 20px 16px 12px; border-bottom: 1px solid #222;
+      position: sticky; top: 0; background: #0f0f0f; z-index: 10;
       display: flex; align-items: center; justify-content: space-between;
     }
     header h1 { font-size: 18px; font-weight: 600; }
-
     #refresh-btn {
       background: #222; border: none; color: #f0f0f0;
       padding: 8px 14px; border-radius: 20px; font-size: 13px; cursor: pointer;
     }
     #refresh-btn:active { background: #333; }
-
     #status { text-align: center; padding: 40px 16px; color: #666; font-size: 14px; }
-
     #error-msg {
       display: none; margin: 16px; padding: 14px 16px;
       background: #1a0a0a; border: 1px solid #5c1a1a;
       border-radius: 10px; color: #ff6b6b; font-size: 13px; line-height: 1.5;
     }
-
     .account-section { margin-bottom: 8px; }
-
     .account-header {
-      display: flex; align-items: center; gap: 10px;
-      padding: 14px 16px 10px;
+      display: flex; align-items: center; gap: 10px; padding: 14px 16px 10px;
     }
     .account-avatar {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: #333; display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; border-radius: 50%; background: #333;
+      display: flex; align-items: center; justify-content: center;
       font-size: 13px; font-weight: 700; color: #aaa;
       flex-shrink: 0; text-transform: uppercase;
     }
     .account-name { font-size: 14px; font-weight: 600; color: #ccc; }
     .account-count { font-size: 12px; color: #555; margin-left: auto; }
-
     .posts-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr);
-      gap: 2px; padding: 0 2px;
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; padding: 0 2px;
     }
-
     .post-card {
       background: #1a1a1a; overflow: hidden;
       cursor: pointer; -webkit-tap-highlight-color: transparent;
     }
     .post-card:active { opacity: 0.75; }
-
-    .post-img-wrap {
-      position: relative; padding-top: 100%; background: #1a1a1a;
-    }
+    .post-img-wrap { position: relative; padding-top: 100%; background: #1a1a1a; }
     .post-img-wrap img {
-      position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%; object-fit: cover;
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;
     }
-
-    /* Placeholder para vídeos y carruseles */
     .post-placeholder {
-      position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: 8px; color: #555;
     }
     .post-placeholder .placeholder-icon { font-size: 28px; }
     .post-placeholder .placeholder-label { font-size: 11px; color: #444; }
-
-    /* Badge de tipo en esquina */
     .post-badge {
       position: absolute; top: 6px; right: 6px;
-      background: rgba(0,0,0,0.7);
-      border-radius: 4px; padding: 2px 5px;
-      font-size: 11px; color: #ccc;
+      background: rgba(0,0,0,0.7); border-radius: 4px;
+      padding: 2px 5px; font-size: 11px; color: #ccc;
     }
-
     .post-info { padding: 8px 10px 10px; }
     .post-caption {
       font-size: 12px; color: #bbb; line-height: 1.45;
@@ -98,32 +71,28 @@
       -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px;
     }
     .post-date { font-size: 11px; color: #555; }
-
+    /* Indicador de traduccion en curso */
+    .traduciendo { opacity: 0.5; font-style: italic; }
     .divider { height: 1px; background: #1e1e1e; margin: 8px 0; }
     .empty-account { padding: 12px 16px; color: #555; font-size: 13px; }
     .account-loading { padding: 12px 16px; color: #555; font-size: 13px; }
-
     #last-update { text-align: center; padding: 20px 16px; color: #444; font-size: 12px; }
 
-    /* ── MODAL ── */
+    /* MODAL */
     #modal-overlay {
       display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.95);
-      z-index: 100; overflow-y: auto; -webkit-overflow-scrolling: touch;
+      background: rgba(0,0,0,0.95); z-index: 100;
+      overflow-y: auto; -webkit-overflow-scrolling: touch;
     }
     #modal-overlay.open { display: block; }
-
     #modal-box {
-      margin: 0 auto; max-width: 500px;
-      min-height: 100vh; display: flex; flex-direction: column;
+      margin: 0 auto; max-width: 500px; min-height: 100vh;
+      display: flex; flex-direction: column;
     }
-
     #modal-topbar {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 16px 10px;
-      position: sticky; top: 0;
-      background: rgba(0,0,0,0.97); z-index: 101;
-      border-bottom: 1px solid #1a1a1a;
+      padding: 14px 16px 10px; position: sticky; top: 0;
+      background: rgba(0,0,0,0.97); z-index: 101; border-bottom: 1px solid #1a1a1a;
     }
     #modal-account { display: flex; align-items: center; gap: 10px; }
     #modal-avatar {
@@ -133,48 +102,39 @@
     }
     #modal-username { font-size: 13px; font-weight: 600; color: #ddd; }
     #modal-date { font-size: 11px; color: #555; margin-top: 1px; }
-
     #modal-close {
       background: #222; border: none; color: #aaa;
       width: 32px; height: 32px; border-radius: 50%;
       font-size: 20px; cursor: pointer;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
-
-    #modal-tipo {
-      padding: 8px 16px 0;
-      font-size: 12px; color: #555;
-    }
-
+    #modal-tipo { padding: 8px 16px 0; font-size: 12px; color: #555; }
     #modal-img-wrap { width: 100%; background: #111; }
     #modal-img-wrap img { width: 100%; display: block; object-fit: contain; }
-
-    /* Placeholder del modal para vídeo/carrusel */
     #modal-placeholder {
-      display: none;
-      width: 100%; padding: 48px 16px;
+      display: none; width: 100%; padding: 48px 16px;
       flex-direction: column; align-items: center; justify-content: center;
       gap: 12px; background: #111;
     }
     #modal-placeholder .ph-icon { font-size: 48px; }
     #modal-placeholder .ph-text { font-size: 14px; color: #555; text-align: center; line-height: 1.5; }
-
     #modal-caption {
       padding: 16px; font-size: 14px; color: #ccc;
       line-height: 1.7; white-space: pre-wrap; word-break: break-word;
       flex: 1; padding-bottom: 48px;
     }
+    #modal-caption.traduciendo { opacity: 0.5; font-style: italic; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>📋 Infórmate pero no te viciess 🤪</h1>
-  <button id="refresh-btn" onclick="cargarTodo()">Actualizar</button>
+  <h1>My Feed</h1>
+  <button id="refresh-btn" onclick="cargarTodo()">Refresh</button>
 </header>
 
 <div id="error-msg"></div>
-<div id="status">Cargando...</div>
+<div id="status">Loading...</div>
 <div id="feed"></div>
 <div id="last-update"></div>
 
@@ -189,7 +149,7 @@
           <div id="modal-date"></div>
         </div>
       </div>
-      <button id="modal-close" onclick="cerrarModalDirecto()">×</button>
+      <button id="modal-close" onclick="cerrarModalDirecto()">x</button>
     </div>
     <div id="modal-tipo"></div>
     <div id="modal-img-wrap">
@@ -205,28 +165,80 @@
 
 <script>
 // ================================================================
-// CONFIGURACIÓN
+// CONFIG: edita estas lineas con tus datos
 // ================================================================
 const BRIDGE_BASE = "https://my-rss-bridge.onrender.com";
-
 const CUENTAS = [
-  "liuwaterwind",
-  "linkoping.university",
-  "liustudentsecondhand",
-  "linkopings_stadsfest",
-  "navitas.se",
-  "studentbostader",
-  "linkopinglive",
-  "linkopings_universitet",
-  "liu_student",
-  "esnlinkoping",
-  
-  
-  
+  "nasa",
   // "cuenta_universidad_1",
-  // "cuenta_universidad_2",
 ];
+const DEEPL_KEY = "fd1ab0fa-7f67-4051-8c3e-844fd4d3060d:fx";
+const DEEPL_URL = "https://api-free.deepl.com/v2/translate";
+const IDIOMA_DESTINO = "EN"; // EN para ingles, ES para espanol
 // ================================================================
+
+const cacheTraduccion = {};
+const datosCache = {};
+
+async function traducir(texto) {
+  if (!texto || texto.trim() === '') return texto;
+  if (cacheTraduccion[texto]) return cacheTraduccion[texto];
+  try {
+    const resp = await fetch(DEEPL_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `DeepL-Auth-Key ${DEEPL_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text: [texto], target_lang: IDIOMA_DESTINO })
+    });
+    if (!resp.ok) throw new Error(`DeepL ${resp.status}`);
+    const data = await resp.json();
+    const traducido = data.translations?.[0]?.text || texto;
+    cacheTraduccion[texto] = traducido;
+    return traducido;
+  } catch (e) {
+    console.warn('DeepL error:', e.message);
+    return texto;
+  }
+}
+
+async function traducirItemsEnSegundoPlano(username, items) {
+  for (let idx = 0; idx < items.length; idx++) {
+    const item = items[idx];
+    const captionOriginal = extraerCaptionLimpio(item);
+    const tituloOriginal = item.title || '';
+
+    const [captionTrad, tituloTrad] = await Promise.all([
+      traducir(captionOriginal),
+      traducir(tituloOriginal),
+    ]);
+
+    item._captionTraducido = captionTrad;
+    item._tituloTraducido = tituloTrad;
+
+    // Actualizar tarjeta en el grid si ya esta visible
+    const captionEl = document.getElementById(`caption-${username}-${idx}`);
+    if (captionEl) {
+      captionEl.textContent = tituloTrad;
+      captionEl.classList.remove('traduciendo');
+    }
+
+    // Si el modal esta abierto mostrando este item, actualizarlo tambien
+    const modalCaption = document.getElementById('modal-caption');
+    if (
+      modalCaption &&
+      document.getElementById('modal-overlay').classList.contains('open') &&
+      modalCaption.dataset.username === username &&
+      parseInt(modalCaption.dataset.idx) === idx
+    ) {
+      modalCaption.textContent = captionTrad;
+      modalCaption.classList.remove('traduciendo');
+    }
+
+    await new Promise(r => setTimeout(r, 350));
+  }
+}
 
 function urlFeed(username) {
   const feedUrl = `${BRIDGE_BASE}/?action=display&bridge=InstagramBridge&context=Username&u=${username}&media_type=all&format=Json`;
@@ -235,7 +247,7 @@ function urlFeed(username) {
 
 function tipoPost(item) {
   const html = item.content_html || '';
-  if (html.includes('<video') || html.includes('video')) return 'video';
+  if (html.includes('<video')) return 'video';
   const imgs = html.match(/<img/g);
   if (imgs && imgs.length > 1) return 'carrusel';
   if (item.attachments && item.attachments.length > 1) return 'carrusel';
@@ -273,10 +285,10 @@ function formatearFecha(iso) {
   const mins = Math.floor(diff / 60000);
   const horas = Math.floor(diff / 3600000);
   const dias = Math.floor(diff / 86400000);
-  if (mins < 60) return `hace ${mins}m`;
-  if (horas < 24) return `hace ${horas}h`;
-  if (dias < 7) return `hace ${dias}d`;
-  return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+  if (mins < 60) return `${mins}m ago`;
+  if (horas < 24) return `${horas}h ago`;
+  if (dias < 7) return `${dias}d ago`;
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 }
 
 function mostrarPlaceholderModal() {
@@ -284,33 +296,36 @@ function mostrarPlaceholderModal() {
   document.getElementById('modal-placeholder').style.display = 'flex';
 }
 
-const datosCache = {};
-
 function abrirModal(username, idx) {
   const item = datosCache[username]?.[idx];
   if (!item) return;
 
   const img = extraerImagen(item);
-  const caption = extraerCaptionLimpio(item);
+  const caption = item._captionTraducido || extraerCaptionLimpio(item);
   const fecha = formatearFecha(item.date_modified);
   const tipo = tipoPost(item);
+  const estaTraduciendo = !item._captionTraducido;
 
   document.getElementById('modal-avatar').textContent = username[0] || '?';
   document.getElementById('modal-username').textContent = `@${username}`;
   document.getElementById('modal-date').textContent = fecha;
-  document.getElementById('modal-caption').textContent = caption;
 
-  // Badge de tipo
+  const modalCaption = document.getElementById('modal-caption');
+  modalCaption.textContent = estaTraduciendo ? caption + '\n\n(translating...)' : caption;
+  modalCaption.dataset.username = username;
+  modalCaption.dataset.idx = idx;
+  if (estaTraduciendo) modalCaption.classList.add('traduciendo');
+  else modalCaption.classList.remove('traduciendo');
+
   const tipoEl = document.getElementById('modal-tipo');
-  if (tipo === 'video') tipoEl.textContent = '🎥 Vídeo';
-  else if (tipo === 'carrusel') tipoEl.textContent = '🖼️ Carrusel · solo se muestra la primera imagen';
+  if (tipo === 'video') tipoEl.textContent = '🎥 Video';
+  else if (tipo === 'carrusel') tipoEl.textContent = '🖼 Carousel · only first image shown';
   else tipoEl.textContent = '';
 
   const imgWrap = document.getElementById('modal-img-wrap');
   const placeholder = document.getElementById('modal-placeholder');
   const modalImg = document.getElementById('modal-img');
 
-  // Reset estado anterior
   imgWrap.style.display = 'block';
   placeholder.style.display = 'none';
 
@@ -318,13 +333,13 @@ function abrirModal(username, idx) {
     imgWrap.style.display = 'none';
     placeholder.style.display = 'flex';
     document.getElementById('modal-ph-icon').textContent = '🎥';
-    document.getElementById('modal-ph-text').textContent = 'Este post es un vídeo.\nAbre Instagram para verlo.';
+    document.getElementById('modal-ph-text').textContent = 'This post is a video.\nOpen Instagram to watch it.';
   } else if (img) {
     modalImg.src = img;
   } else {
     mostrarPlaceholderModal();
-    document.getElementById('modal-ph-icon').textContent = '🖼️';
-    document.getElementById('modal-ph-text').textContent = 'Imagen no disponible';
+    document.getElementById('modal-ph-icon').textContent = '🖼';
+    document.getElementById('modal-ph-text').textContent = 'Image not available';
   }
 
   document.getElementById('modal-overlay').classList.add('open');
@@ -344,48 +359,40 @@ window.addEventListener('popstate', cerrarModalDirecto);
 
 function renderPosts(username, items) {
   if (!items || items.length === 0) {
-    return `<div class="empty-account">Sin posts recientes</div>`;
+    return `<div class="empty-account">No recent posts</div>`;
   }
-
   return `<div class="posts-grid">${items.map((item, idx) => {
     const img = extraerImagen(item);
     const tipo = tipoPost(item);
-    const caption = item.title || '';
+    const titulo = item._tituloTraducido || item.title || '';
     const fecha = formatearFecha(item.date_modified);
+    const yaTraducido = !!item._tituloTraducido;
 
     let contenidoImagen;
     if (tipo === 'video') {
-      contenidoImagen = `
-        <div class="post-placeholder">
-          <div class="placeholder-icon">🎥</div>
-          <div class="placeholder-label">Vídeo</div>
-        </div>`;
+      contenidoImagen = `<div class="post-placeholder">
+        <div class="placeholder-icon">🎥</div>
+        <div class="placeholder-label">Video</div>
+      </div>`;
     } else if (img) {
-      contenidoImagen = `<img src="${img}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      contenidoImagen = `<img src="${img}" alt="" loading="lazy"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
         <div class="post-placeholder" style="display:none">
-          <div class="placeholder-icon">${tipo === 'carrusel' ? '🖼️' : '📷'}</div>
-          <div class="placeholder-label">${tipo === 'carrusel' ? 'Carrusel' : ''}</div>
+          <div class="placeholder-icon">${tipo === 'carrusel' ? '🖼' : '📷'}</div>
         </div>`;
     } else {
-      contenidoImagen = `
-        <div class="post-placeholder">
-          <div class="placeholder-icon">📷</div>
-        </div>`;
+      contenidoImagen = `<div class="post-placeholder"><div class="placeholder-icon">📷</div></div>`;
     }
 
     const badge = tipo !== 'foto' ? `<div class="post-badge">${tipo === 'video' ? '▶' : '⊞'}</div>` : '';
 
-    return `
-      <div class="post-card" onclick="abrirModal('${username}', ${idx})">
-        <div class="post-img-wrap">
-          ${contenidoImagen}
-          ${badge}
-        </div>
-        <div class="post-info">
-          <div class="post-caption">${caption}</div>
-          <div class="post-date">${fecha}</div>
-        </div>
-      </div>`;
+    return `<div class="post-card" onclick="abrirModal('${username}', ${idx})">
+      <div class="post-img-wrap">${contenidoImagen}${badge}</div>
+      <div class="post-info">
+        <div class="post-caption ${yaTraducido ? '' : 'traduciendo'}" id="caption-${username}-${idx}">${titulo}</div>
+        <div class="post-date">${fecha}</div>
+      </div>
+    </div>`;
   }).join('')}</div>`;
 }
 
@@ -403,7 +410,7 @@ async function cargarTodo() {
   const lastUpdate = document.getElementById('last-update');
 
   feed.innerHTML = '';
-  status.textContent = 'Cargando...';
+  status.textContent = 'Loading...';
   errorMsg.style.display = 'none';
   lastUpdate.textContent = '';
 
@@ -418,7 +425,7 @@ async function cargarTodo() {
         <div class="account-avatar">${username[0]}</div>
         <div class="account-name">@${username}</div>
       </div>
-      <div class="account-loading" id="loading-${username}">Cargando...</div>
+      <div class="account-loading" id="loading-${username}">Loading...</div>
       ${i < CUENTAS.length - 1 ? '<div class="divider"></div>' : ''}
     `;
     feed.appendChild(section);
@@ -429,6 +436,7 @@ async function cargarTodo() {
       datosCache[username] = items;
       const el = document.getElementById(`loading-${username}`);
       if (el) el.outerHTML = renderPosts(username, items);
+
       const header = section.querySelector('.account-header');
       if (header && items.length > 0) {
         const count = document.createElement('span');
@@ -436,9 +444,13 @@ async function cargarTodo() {
         count.textContent = `${items.length} posts`;
         header.appendChild(count);
       }
+
+      // Traducir en segundo plano sin bloquear el resto de la carga
+      traducirItemsEnSegundoPlano(username, items);
+
     } catch (e) {
       const el = document.getElementById(`loading-${username}`);
-      if (el) { el.textContent = `No se pudo cargar @${username}`; el.style.color = '#ff6b6b'; }
+      if (el) { el.textContent = `Could not load @${username}`; el.style.color = '#ff6b6b'; }
       errores.push(`@${username}: ${e.message}`);
     }
 
@@ -447,9 +459,9 @@ async function cargarTodo() {
 
   if (errores.length > 0) {
     errorMsg.style.display = 'block';
-    errorMsg.innerHTML = `⚠️ Algunos feeds fallaron:<br>${errores.join('<br>')}`;
+    errorMsg.innerHTML = `Warning: some feeds failed:<br>${errores.join('<br>')}`;
   }
-  lastUpdate.textContent = `Actualizado: ${new Date().toLocaleTimeString('es-ES')}`;
+  lastUpdate.textContent = `Updated: ${new Date().toLocaleTimeString('en-GB')}`;
 }
 
 cargarTodo();

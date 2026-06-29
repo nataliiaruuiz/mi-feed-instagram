@@ -9,12 +9,17 @@
     body {
       background: #0f0f0f; color: #f0f0f0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      min-height: 100vh;
+      min-height: 100vh; padding-bottom: 80px;
     }
+
+    /* HEADER */
     header {
-      padding: 20px 16px 12px; border-bottom: 1px solid #222;
+      padding: 18px 16px 0;
       position: sticky; top: 0; background: #0f0f0f; z-index: 10;
+    }
+    .header-top {
       display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
     }
     header h1 { font-size: 18px; font-weight: 600; }
     #refresh-btn {
@@ -22,6 +27,25 @@
       padding: 8px 14px; border-radius: 20px; font-size: 13px; cursor: pointer;
     }
     #refresh-btn:active { background: #333; }
+    #refresh-btn:disabled { opacity: 0.4; }
+
+    /* TABS */
+    .tabs {
+      display: flex; border-bottom: 1px solid #222;
+    }
+    .tab-btn {
+      flex: 1; background: none; border: none; color: #666;
+      padding: 10px 0; font-size: 14px; font-weight: 500;
+      cursor: pointer; border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .tab-btn.active { color: #f0f0f0; border-bottom-color: #f0f0f0; }
+
+    /* PANELS */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* FEED PANEL */
     #status { text-align: center; padding: 40px 16px; color: #666; font-size: 14px; }
     #error-msg {
       display: none; margin: 16px; padding: 14px 16px;
@@ -54,8 +78,8 @@
     }
     .post-placeholder {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 8px; color: #555;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 8px;
     }
     .post-placeholder .placeholder-icon { font-size: 28px; }
     .post-placeholder .placeholder-label { font-size: 11px; color: #444; }
@@ -70,13 +94,54 @@
       display: -webkit-box; -webkit-line-clamp: 2;
       -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px;
     }
+    .post-caption.traduciendo { opacity: 0.5; font-style: italic; }
     .post-date { font-size: 11px; color: #555; }
-    /* Indicador de traduccion en curso */
-    .traduciendo { opacity: 0.5; font-style: italic; }
     .divider { height: 1px; background: #1e1e1e; margin: 8px 0; }
     .empty-account { padding: 12px 16px; color: #555; font-size: 13px; }
     .account-loading { padding: 12px 16px; color: #555; font-size: 13px; }
     #last-update { text-align: center; padding: 20px 16px; color: #444; font-size: 12px; }
+
+    /* SETTINGS PANEL */
+    #panel-settings { padding: 20px 16px; }
+    #panel-settings h2 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    #panel-settings p { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 16px; }
+
+    .account-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+
+    .account-row {
+      display: flex; align-items: center; gap: 10px;
+      background: #1a1a1a; border-radius: 10px; padding: 10px 12px;
+    }
+    .account-row .at { color: #666; font-size: 14px; }
+    .account-row input {
+      flex: 1; background: none; border: none; color: #f0f0f0;
+      font-size: 14px; outline: none; padding: 0;
+    }
+    .account-row input::placeholder { color: #444; }
+    .delete-btn {
+      background: none; border: none; color: #555;
+      font-size: 18px; cursor: pointer; padding: 0 4px; line-height: 1;
+    }
+    .delete-btn:active { color: #ff6b6b; }
+
+    .add-btn {
+      width: 100%; background: #1a1a1a; border: 1px dashed #333;
+      color: #666; padding: 12px; border-radius: 10px;
+      font-size: 14px; cursor: pointer; margin-bottom: 20px;
+    }
+    .add-btn:active { background: #222; }
+
+    .save-btn {
+      width: 100%; background: #f0f0f0; border: none;
+      color: #0f0f0f; padding: 14px; border-radius: 12px;
+      font-size: 15px; font-weight: 600; cursor: pointer;
+    }
+    .save-btn:active { opacity: 0.8; }
+
+    .settings-feedback {
+      display: none; text-align: center; margin-top: 12px;
+      font-size: 13px; color: #4caf50;
+    }
 
     /* MODAL */
     #modal-overlay {
@@ -85,10 +150,7 @@
       overflow-y: auto; -webkit-overflow-scrolling: touch;
     }
     #modal-overlay.open { display: block; }
-    #modal-box {
-      margin: 0 auto; max-width: 500px; min-height: 100vh;
-      display: flex; flex-direction: column;
-    }
+    #modal-box { margin: 0 auto; max-width: 500px; min-height: 100vh; display: flex; flex-direction: column; }
     #modal-topbar {
       display: flex; align-items: center; justify-content: space-between;
       padding: 14px 16px 10px; position: sticky; top: 0;
@@ -129,14 +191,33 @@
 <body>
 
 <header>
-  <h1>My Feed</h1>
-  <button id="refresh-btn" onclick="cargarTodo()">Refresh</button>
+  <div class="header-top">
+    <h1>My Feed</h1>
+    <button id="refresh-btn" onclick="cargarTodo()">Refresh</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="cambiarTab('feed')">Feed</button>
+    <button class="tab-btn" onclick="cambiarTab('settings')">Accounts</button>
+  </div>
 </header>
 
-<div id="error-msg"></div>
-<div id="status">Loading...</div>
-<div id="feed"></div>
-<div id="last-update"></div>
+<!-- PANEL FEED -->
+<div id="panel-feed" class="panel active">
+  <div id="error-msg"></div>
+  <div id="status">Loading...</div>
+  <div id="feed"></div>
+  <div id="last-update"></div>
+</div>
+
+<!-- PANEL SETTINGS -->
+<div id="panel-settings" class="panel">
+  <h2>Accounts to follow</h2>
+  <p>Add the Instagram usernames you want to see. Changes take effect when you press Save and then Refresh.</p>
+  <div class="account-list" id="account-list"></div>
+  <button class="add-btn" onclick="agregarFila()">+ Add account</button>
+  <button class="save-btn" onclick="guardarCuentas()">Save</button>
+  <div class="settings-feedback" id="settings-feedback">Saved! Go to Feed and press Refresh.</div>
+</div>
 
 <!-- MODAL -->
 <div id="modal-overlay" onclick="cerrarModal(event)">
@@ -165,18 +246,75 @@
 
 <script>
 // ================================================================
-// CONFIG: edita estas lineas con tus datos
+// CONFIG: cuentas por defecto (se sobreescriben con lo guardado)
 // ================================================================
 const BRIDGE_BASE = "https://my-rss-bridge.onrender.com";
-const CUENTAS = [
-  "nasa",
-  // "cuenta_universidad_1",
-];
+const CUENTAS_DEFAULT = ["nasa"];
 const DEEPL_KEY = "fd1ab0fa-7f67-4051-8c3e-844fd4d3060d:fx";
 const DEEPL_URL = "https://api-free.deepl.com/v2/translate";
-const IDIOMA_DESTINO = "EN"; // EN para ingles, ES para espanol
+const IDIOMA_DESTINO = "EN";
+const STORAGE_KEY = "mifeed_cuentas";
 // ================================================================
 
+// Lee cuentas desde localStorage, o usa las de defecto
+function leerCuentas() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch(e) {}
+  return [...CUENTAS_DEFAULT];
+}
+
+function guardarCuentas() {
+  const filas = document.querySelectorAll('.account-input');
+  const cuentas = Array.from(filas)
+    .map(i => i.value.trim().replace(/^@/, ''))
+    .filter(v => v !== '');
+
+  if (cuentas.length === 0) {
+    alert('Add at least one account.');
+    return;
+  }
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(cuentas));
+  const fb = document.getElementById('settings-feedback');
+  fb.style.display = 'block';
+  setTimeout(() => fb.style.display = 'none', 3000);
+}
+
+function agregarFila(valor = '') {
+  const list = document.getElementById('account-list');
+  const row = document.createElement('div');
+  row.className = 'account-row';
+  row.innerHTML = `
+    <span class="at">@</span>
+    <input class="account-input" type="text" placeholder="username" value="${valor}"
+      autocapitalize="none" autocorrect="off" spellcheck="false">
+    <button class="delete-btn" onclick="this.parentElement.remove()">x</button>
+  `;
+  list.appendChild(row);
+  if (!valor) row.querySelector('input').focus();
+}
+
+function renderSettings() {
+  document.getElementById('account-list').innerHTML = '';
+  leerCuentas().forEach(c => agregarFila(c));
+}
+
+// TABS
+function cambiarTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', (i === 0 && tab === 'feed') || (i === 1 && tab === 'settings'));
+  });
+  document.getElementById('panel-feed').classList.toggle('active', tab === 'feed');
+  document.getElementById('panel-settings').classList.toggle('active', tab === 'settings');
+  if (tab === 'settings') renderSettings();
+}
+
+// TRADUCCION
 const cacheTraduccion = {};
 const datosCache = {};
 
@@ -206,25 +344,19 @@ async function traducir(texto) {
 async function traducirItemsEnSegundoPlano(username, items) {
   for (let idx = 0; idx < items.length; idx++) {
     const item = items[idx];
-    const captionOriginal = extraerCaptionLimpio(item);
-    const tituloOriginal = item.title || '';
-
     const [captionTrad, tituloTrad] = await Promise.all([
-      traducir(captionOriginal),
-      traducir(tituloOriginal),
+      traducir(extraerCaptionLimpio(item)),
+      traducir(item.title || ''),
     ]);
-
     item._captionTraducido = captionTrad;
     item._tituloTraducido = tituloTrad;
 
-    // Actualizar tarjeta en el grid si ya esta visible
     const captionEl = document.getElementById(`caption-${username}-${idx}`);
     if (captionEl) {
       captionEl.textContent = tituloTrad;
       captionEl.classList.remove('traduciendo');
     }
 
-    // Si el modal esta abierto mostrando este item, actualizarlo tambien
     const modalCaption = document.getElementById('modal-caption');
     if (
       modalCaption &&
@@ -240,6 +372,7 @@ async function traducirItemsEnSegundoPlano(username, items) {
   }
 }
 
+// HELPERS
 function urlFeed(username) {
   const feedUrl = `${BRIDGE_BASE}/?action=display&bridge=InstagramBridge&context=Username&u=${username}&media_type=all&format=Json`;
   return `https://corsproxy.io/?url=${encodeURIComponent(feedUrl)}`;
@@ -255,9 +388,8 @@ function tipoPost(item) {
 }
 
 function extraerImagen(item) {
-  if (item.attachments && item.attachments.length > 0) {
+  if (item.attachments && item.attachments.length > 0)
     return item.attachments[0].url.replace(/\\/g, '');
-  }
   const html = item.content_html || '';
   const m = html.match(/src=\\"([^\\"]+)\\"/);
   if (m) return m[1].replace(/\\/g, '');
@@ -280,8 +412,7 @@ function extraerCaptionLimpio(item) {
 function formatearFecha(iso) {
   if (!iso) return '';
   const d = new Date(iso);
-  const ahora = new Date();
-  const diff = ahora - d;
+  const diff = new Date() - d;
   const mins = Math.floor(diff / 60000);
   const horas = Math.floor(diff / 3600000);
   const dias = Math.floor(diff / 86400000);
@@ -291,6 +422,7 @@ function formatearFecha(iso) {
   return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 }
 
+// MODAL
 function mostrarPlaceholderModal() {
   document.getElementById('modal-img-wrap').style.display = 'none';
   document.getElementById('modal-placeholder').style.display = 'flex';
@@ -302,30 +434,25 @@ function abrirModal(username, idx) {
 
   const img = extraerImagen(item);
   const caption = item._captionTraducido || extraerCaptionLimpio(item);
-  const fecha = formatearFecha(item.date_modified);
   const tipo = tipoPost(item);
   const estaTraduciendo = !item._captionTraducido;
 
   document.getElementById('modal-avatar').textContent = username[0] || '?';
   document.getElementById('modal-username').textContent = `@${username}`;
-  document.getElementById('modal-date').textContent = fecha;
+  document.getElementById('modal-date').textContent = formatearFecha(item.date_modified);
 
   const modalCaption = document.getElementById('modal-caption');
   modalCaption.textContent = estaTraduciendo ? caption + '\n\n(translating...)' : caption;
   modalCaption.dataset.username = username;
   modalCaption.dataset.idx = idx;
-  if (estaTraduciendo) modalCaption.classList.add('traduciendo');
-  else modalCaption.classList.remove('traduciendo');
+  modalCaption.classList.toggle('traduciendo', estaTraduciendo);
 
   const tipoEl = document.getElementById('modal-tipo');
-  if (tipo === 'video') tipoEl.textContent = '🎥 Video';
-  else if (tipo === 'carrusel') tipoEl.textContent = '🖼 Carousel · only first image shown';
-  else tipoEl.textContent = '';
+  tipoEl.textContent = tipo === 'video' ? '🎥 Video'
+    : tipo === 'carrusel' ? '🖼 Carousel · only first image shown' : '';
 
   const imgWrap = document.getElementById('modal-img-wrap');
   const placeholder = document.getElementById('modal-placeholder');
-  const modalImg = document.getElementById('modal-img');
-
   imgWrap.style.display = 'block';
   placeholder.style.display = 'none';
 
@@ -335,7 +462,7 @@ function abrirModal(username, idx) {
     document.getElementById('modal-ph-icon').textContent = '🎥';
     document.getElementById('modal-ph-text').textContent = 'This post is a video.\nOpen Instagram to watch it.';
   } else if (img) {
-    modalImg.src = img;
+    document.getElementById('modal-img').src = img;
   } else {
     mostrarPlaceholderModal();
     document.getElementById('modal-ph-icon').textContent = '🖼';
@@ -357,42 +484,41 @@ function cerrarModal(e) {
 
 window.addEventListener('popstate', cerrarModalDirecto);
 
+// RENDER
 function renderPosts(username, items) {
-  if (!items || items.length === 0) {
+  if (!items || items.length === 0)
     return `<div class="empty-account">No recent posts</div>`;
-  }
+
   return `<div class="posts-grid">${items.map((item, idx) => {
     const img = extraerImagen(item);
     const tipo = tipoPost(item);
     const titulo = item._tituloTraducido || item.title || '';
     const fecha = formatearFecha(item.date_modified);
-    const yaTraducido = !!item._tituloTraducido;
 
     let contenidoImagen;
     if (tipo === 'video') {
       contenidoImagen = `<div class="post-placeholder">
         <div class="placeholder-icon">🎥</div>
-        <div class="placeholder-label">Video</div>
-      </div>`;
+        <div class="placeholder-label">Video</div></div>`;
     } else if (img) {
       contenidoImagen = `<img src="${img}" alt="" loading="lazy"
         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
         <div class="post-placeholder" style="display:none">
-          <div class="placeholder-icon">${tipo === 'carrusel' ? '🖼' : '📷'}</div>
-        </div>`;
+          <div class="placeholder-icon">${tipo === 'carrusel' ? '🖼' : '📷'}</div></div>`;
     } else {
       contenidoImagen = `<div class="post-placeholder"><div class="placeholder-icon">📷</div></div>`;
     }
 
-    const badge = tipo !== 'foto' ? `<div class="post-badge">${tipo === 'video' ? '▶' : '⊞'}</div>` : '';
+    const badge = tipo !== 'foto'
+      ? `<div class="post-badge">${tipo === 'video' ? '▶' : '⊞'}</div>` : '';
 
     return `<div class="post-card" onclick="abrirModal('${username}', ${idx})">
       <div class="post-img-wrap">${contenidoImagen}${badge}</div>
       <div class="post-info">
-        <div class="post-caption ${yaTraducido ? '' : 'traduciendo'}" id="caption-${username}-${idx}">${titulo}</div>
+        <div class="post-caption ${item._tituloTraducido ? '' : 'traduciendo'}"
+          id="caption-${username}-${idx}">${titulo}</div>
         <div class="post-date">${fecha}</div>
-      </div>
-    </div>`;
+      </div></div>`;
   }).join('')}</div>`;
 }
 
@@ -404,15 +530,17 @@ async function fetchCuenta(username) {
 }
 
 async function cargarTodo() {
+  const CUENTAS = leerCuentas();
   const feed = document.getElementById('feed');
   const status = document.getElementById('status');
   const errorMsg = document.getElementById('error-msg');
-  const lastUpdate = document.getElementById('last-update');
+  const btn = document.getElementById('refresh-btn');
 
   feed.innerHTML = '';
   status.textContent = 'Loading...';
   errorMsg.style.display = 'none';
-  lastUpdate.textContent = '';
+  document.getElementById('last-update').textContent = '';
+  btn.disabled = true;
 
   const errores = [];
 
@@ -436,7 +564,6 @@ async function cargarTodo() {
       datosCache[username] = items;
       const el = document.getElementById(`loading-${username}`);
       if (el) el.outerHTML = renderPosts(username, items);
-
       const header = section.querySelector('.account-header');
       if (header && items.length > 0) {
         const count = document.createElement('span');
@@ -444,10 +571,7 @@ async function cargarTodo() {
         count.textContent = `${items.length} posts`;
         header.appendChild(count);
       }
-
-      // Traducir en segundo plano sin bloquear el resto de la carga
       traducirItemsEnSegundoPlano(username, items);
-
     } catch (e) {
       const el = document.getElementById(`loading-${username}`);
       if (el) { el.textContent = `Could not load @${username}`; el.style.color = '#ff6b6b'; }
@@ -461,7 +585,9 @@ async function cargarTodo() {
     errorMsg.style.display = 'block';
     errorMsg.innerHTML = `Warning: some feeds failed:<br>${errores.join('<br>')}`;
   }
-  lastUpdate.textContent = `Updated: ${new Date().toLocaleTimeString('en-GB')}`;
+  document.getElementById('last-update').textContent =
+    `Updated: ${new Date().toLocaleTimeString('en-GB')}`;
+  btn.disabled = false;
 }
 
 cargarTodo();
